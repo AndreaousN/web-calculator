@@ -18,20 +18,4 @@ public class CalculatorApplication {
         SpringApplication.run(CalculatorApplication.class, args);
         System.out.println("Woohoo first Spring Boot application");
     }
-
-    // Metodo pavadinimas klaustukas (?) raktas, lygybe, reiksme. Optional jeigu daugiau nori reiksmiu simbolis & (and)
-    // Pvz: http://localhost:8080/hello?name=Egidijus
-    @GetMapping("/hello")
-    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return " Hello, " + name;
-    }
-
-    @GetMapping("/index")
-    public String index() {
-        return "<h1>Online calculator. Will perform operations:</h1><br>" +
-                "<h3> &nbsp;&nbsp; Add <br>" +
-                "&nbsp;&nbsp; Multiply <br>" +
-                "&nbsp;&nbsp; Divide <br>" +
-                "&nbsp;&nbsp; Subtract <br> </h3>";
-    }
 }

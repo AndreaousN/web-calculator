@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Min;
 public class Number {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "number_id")
+    @Column(name = "id")
     private int id;
     @Min(value = 0, message = "Validation error: Number cannot be negative.")
     @Column(name = "number1")
@@ -41,6 +41,10 @@ public class Number {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getNumber1() {

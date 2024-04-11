@@ -80,4 +80,30 @@ public class CalculatorController {
             return "calculate";
         }
     }
+    @GetMapping("/numbers")
+    public String getAllNumbers(Model model) {
+        model.addAttribute("numbers", numberService.getAll());
+        return "numbers";
+    }
+    @GetMapping("/view{id}")
+    public String getById(@RequestParam("id") int id, Model model) {
+        model.addAttribute("number", numberService.getById(id));
+        return "number";
+    }
+    @GetMapping("/delete{id}")
+    public String delete(@RequestParam("id") int id, Model model) {
+        numberService.delete(id);
+        model.addAttribute("numbers", numberService.getAll());
+        return "numbers";
+    }
+    @GetMapping("/refresh{id}")
+    public String update(@RequestParam("id") int id, Model model) {
+        model.addAttribute("number", numberService.getById(id));
+        return "refresh";
+    }
+    @PostMapping("/refreshNumber")
+    public String updateNumber(@ModelAttribute("number") Number number) {
+        numberService.update(number);
+        return "redirect:/view?id=" + number.getId();
+    }
 }
