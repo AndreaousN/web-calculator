@@ -1,9 +1,11 @@
 package com.spring.calculator.service;
 
 import com.spring.calculator.model.Number;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface NumberService {
     List<Number> getAll();
 

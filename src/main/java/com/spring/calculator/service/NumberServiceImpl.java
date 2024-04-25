@@ -1,41 +1,42 @@
 package com.spring.calculator.service;
 
 import com.spring.calculator.model.Number;
-import com.spring.calculator.model.NumberDAO;
+import com.spring.calculator.repository.NumberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class NumberServiceImpl implements NumberService {
+    private final NumberRepository numberRepository;
     @Autowired
-    @Qualifier("NumberDAO")
-    public NumberDAO numberDAO;
+    public NumberServiceImpl(NumberRepository numberRepository) {
+        this.numberRepository = numberRepository;
+    }
 
     @Override
     public List<Number> getAll() {
-        return numberDAO.findEntities();
+        return numberRepository.findAll();
     }
 
     @Override
     public void save(Number number) {
-        numberDAO.insertEntity(number);
+        numberRepository.save(number);
     }
 
     @Override
     public Number getById(int id) {
-        return numberDAO.findEntityById(id);
+        return numberRepository.findById(id);
     }
 
     @Override
     public void update(Number number) {
-        numberDAO.updateEntity(number);
+        numberRepository.save(number);
     }
 
     @Override
     public void delete(int id) {
-        numberDAO.removeEntityById(id);
+        numberRepository.deleteById(id);
     }
 }

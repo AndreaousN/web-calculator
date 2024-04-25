@@ -28,14 +28,17 @@ import java.util.HashMap;
 
 @EnableAutoConfiguration
 public class CalculatorController {
+    private final NumberService numberService;
     @Autowired
-    @Qualifier("NumberService")
-    public NumberService numberService;
+    public CalculatorController(@Qualifier("NumberService") NumberService numberService) {
+        this.numberService = numberService;;
+    }
+
 
     // Maršrutizavimo informacija. Šiuo atveju ji nurodo Spring karkasui,
     // kad visos HTTP užklausos, kurių kelias yra "/", bus apdorotos metodo home().
-    @RequestMapping(method = RequestMethod.GET, value = "/")
-    public String home(Model model) {
+    @RequestMapping(method = RequestMethod.GET, value = "/calculator")
+    public String calculator(Model model) {
         // Jeigu modelis "number" nepavyksta praeiti validacijos - per jį grąžinamos validacijos klaidos į vaizdą (view).
         model.addAttribute("number", new Number());
         // Grąžiname JSP failą, jis turi būti talpinamas 'webapp -> WEB-INF -> jsp' kataloge
@@ -59,7 +62,7 @@ public class CalculatorController {
             String operation = numbers.get("operation");
 
             System.out.println("Results: " + numbers.entrySet());
-            // String calculate(int number1, int number2, String operation, ModelMap modelMap) {
+            // String calculate(int number1, int number2, String operation, ModelMap) {
             int result = switch (operation) {
                 case "+" -> number1 + number2;
                 case "-" -> number1 - number2;
@@ -80,30 +83,37 @@ public class CalculatorController {
             return "calculate";
         }
     }
-    @GetMapping("/numbers")
-    public String getAllNumbers(Model model) {
+
+    @GetMapping(value = "/allNumbers")
+    public String allNumbers(Model model) {
         model.addAttribute("numbers", numberService.getAll());
-        return "numbers";
+        return "allNumbers";
     }
-    @GetMapping("/view{id}")
-    public String getById(@RequestParam("id") int id, Model model) {
+
+    @GetMapping(value = "/showNum")
+    public String showNum(int id, Model model) {
+        System.out.println(id);
         model.addAttribute("number", numberService.getById(id));
+        System.out.println(numberService.getById(id));
         return "number";
     }
-    @GetMapping("/delete{id}")
-    public String delete(@RequestParam("id") int id, Model model) {
+
+    @GetMapping(value = "/delete")
+    public String delete(int id, Model model) {
         numberService.delete(id);
-        model.addAttribute("numbers", numberService.getAll());
-        return "numbers";
+        model.addAttribute("number", numberService.getAll());
+        return "allNumbers";
     }
-    @GetMapping("/refresh{id}")
-    public String update(@RequestParam("id") int id, Model model) {
+
+    @GetMapping(value = "/updateNumber")
+    public String update(int id, Model model) {
         model.addAttribute("number", numberService.getById(id));
-        return "refresh";
+        return "updateNumber";
     }
-    @PostMapping("/refreshNumber")
-    public String updateNumber(@ModelAttribute("number") Number number) {
+
+    @PostMapping(value = "/updateNum")
+    public String updateNum(@ModelAttribute("number") Number number) {
         numberService.update(number);
-        return "redirect:/view?id=" + number.getId();
+        return "redirect:/showNum?id=" + number.getId();
     }
 }
