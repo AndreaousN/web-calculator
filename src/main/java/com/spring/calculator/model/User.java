@@ -13,37 +13,37 @@ public class User {
     @Column(name = "user_id")
     private int id;
 
-    @NotBlank(message = "Username is required")
     @Column(name = "username")
     private String username;
 
-    @Email(message = "Enter a valid email adress")
-    @NotBlank(message = "Email is required")
+    @Email(message = "Enter a valid email address")
     @Column(name = "email")
     private String email;
 
-
-    @NotBlank(message = "Password is required")
     @Column(name = "password")
     private String password;
 
     @Transient
-    @NotBlank(message = "Password conformation is required")
     private String passwordConfirm;
 
-    public User(int id, String username, String email, String password, String passwordConfirm) {
+    @Column(name = "role")
+    private String role;
+
+    public User(int id, String username, String email, String password, String passwordConfirm, String role) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
+        this.role = role;
     }
 
-    public User(String username, String email, String password, String passwordConfirm) {
+    public User(String username, String email, String password, String passwordConfirm, String role) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
+        this.role = role;
     }
 
     public User() {
@@ -88,5 +88,13 @@ public class User {
 
     public void setPasswordConfirm(String passwordConfirm) {
         this.passwordConfirm = passwordConfirm;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

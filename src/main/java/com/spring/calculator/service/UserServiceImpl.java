@@ -2,10 +2,11 @@ package com.spring.calculator.service;
 
 import com.spring.calculator.model.User;
 import com.spring.calculator.repository.UserRepository;
-import com.spring.calculator.utils.BCryptPassword;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -13,6 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    @Autowired
+    @Qualifier("BCryptPasswordEncoder")
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final UserRepository userRepository;
     @Autowired
@@ -22,16 +27,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(User user) {
-        String hashedPassword = BCryptPassword.hashPassword(user.getPassword());
-        logger.info("Hashed password: {}", hashedPassword);
-        user.setPassword(hashedPassword);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
+        // Pagal nutylėjimą naujas vartotojas bus "user".
+        // Saugumo sumetimais paprastą vartotoją padaryti "admin" galima, kol kas, tik per duomenų bazę
+        user.setRole("user");
+
         userRepository.save(user);
     }
 
     @Override
     public boolean authenticateUser(String username, String password) {
         User user = userRepository.findByUsername(username);
-        return user != null && BCryptPassword.hashPassword(password).equals(user.getPassword());
+        return user != null && bCryptPasswordEncoder.encode(password).equals(user.getPassword());
     }
 
     @Override
@@ -55,6 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    // Kai registruojamas naujas vartotojas, reikia patikrinti ar nėra duplikatų vartotojo vardu
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }

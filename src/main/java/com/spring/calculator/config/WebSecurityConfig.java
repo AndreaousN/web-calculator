@@ -19,6 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurityConfig {
+
     private UserDetailsService userDetailsService;
 
     public WebSecurityConfig(UserDetailsService userDetailsService) {
@@ -37,7 +38,12 @@ public class WebSecurityConfig {
                     authorize.requestMatchers("/resources/**", "/register").permitAll();
                     authorize.requestMatchers("/resources/**", "/login").permitAll();
                     authorize.anyRequest().authenticated();
-                }).httpBasic(Customizer.withDefaults());
+                }).httpBasic(Customizer.withDefaults())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)
+                );
         return http.build();
     }
 

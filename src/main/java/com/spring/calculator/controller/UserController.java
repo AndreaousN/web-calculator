@@ -1,17 +1,17 @@
 package com.spring.calculator.controller;
 
 import com.spring.calculator.model.User;
+import com.spring.calculator.service.SecurityService;
 import com.spring.calculator.service.UserService;
-import com.spring.calculator.utils.BCryptPassword;
+import com.spring.calculator.utils.UserValidator;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +23,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 @EnableAutoConfiguration
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @Autowired
+    private UserValidator userValidator;
+    @Autowired
+    private SecurityService securityService;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final UserService userService;
 
@@ -44,36 +51,19 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerNewUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
+    public String registerNewUser(@ModelAttribute("user") User user, BindingResult result) {
+        userValidator.validate(user, result);
+
         if (result.hasErrors()) {
             return "register";
         }
-        // Check if the password is valid
-        if (!isValidPassword(user.getPassword())) {
-            result.rejectValue("password", "error.user", "Your password must be at least 8 characters long and contain at least one letter, one number, and one special character among @$!%*#?&.");
-            return "register";
-        }
-        if (!user.getPassword().equals(user.getPasswordConfirm())) {
-            result.rejectValue("passwordConfirm", "error.user", "Passwords do not match");
-            return "register";
-        }
-        // Check if the username already exists
-        if (userService.getUserByUsername(user.getUsername()) != null) {
-            result.rejectValue("username", "error.user", "Username already exists");
-            return "register";
-        }
-        // Check if the email already exists
-        if (userService.getUserByEmail(user.getEmail()) != null) {
-            result.rejectValue("email", "error.user", "Email already exists");
-            return "register";
-        }
+
         // Save the user to the database
         userService.createUser(user);
-        return "redirect:/login";
-    }
 
-    private boolean isValidPassword(String password) {
-        return password != null && password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$");
+        securityService.autoLogin(user.getUsername(), user.getPassword());
+
+        return "redirect:/login";
     }
 
     @GetMapping(value = "/login")
@@ -83,27 +73,26 @@ public class UserController {
     }
 
     @PostMapping("/loginUser")
-    public String loginUser(@ModelAttribute("user") User loginUser, HttpSession session, Model model) {
+    public String loginUser(@ModelAttribute("user") User loginUser, HttpSession session, BindingResult result) {
         // Retrieve the user from the database based on the provided username
         User userFromDB = userService.getUserByUsername(loginUser.getUsername());
 
-        // Check if the user exists
-        if (userFromDB == null || !BCryptPassword.checkPassword(loginUser.getPassword(), userFromDB.getPassword())) {
-            model.addAttribute("errorMessage", "Username or password incorrect");
+        userValidator.validate(loginUser, result);
+
+        if (result.hasErrors()) {
             return "login";
         }
 
         // Log the entered username and hashed password for debugging purposes
         logger.info("Entered Username: {}", loginUser.getUsername());
-        logger.info("Entered Password (Hashed): {}", BCryptPassword.hashPassword(loginUser.getPassword()));
+        logger.info("Entered Password (Hashed): {}", bCryptPasswordEncoder.encode(loginUser.getPassword()));
 
         // Compare the hashed passwords using the checkPassword method
-        if (BCryptPassword.checkPassword(loginUser.getPassword(), userFromDB.getPassword())) {
+        if (bCryptPasswordEncoder.matches(loginUser.getPassword(), userFromDB.getPassword())) {
             // Passwords match, user is authenticated
             session.setAttribute("username", userFromDB.getUsername());
             return "redirect:/calculator"; // Redirect to the user's profile page
         } else {
-
             return "redirect:/login";
         }
     }
