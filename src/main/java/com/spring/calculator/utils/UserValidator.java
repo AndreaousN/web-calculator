@@ -61,8 +61,8 @@ public class UserValidator implements Validator {
             errors.rejectValue("email", "User.size.email");
         }
         // Check if the user exists
-        if (userFromDB == null || !bCryptPasswordEncoder.matches(user.getPassword(), userFromDB.getPassword())) {
-            errors.reject("User.exists.password");
+        if (userFromDB != null && !bCryptPasswordEncoder.matches(user.getPassword(), userFromDB.getPassword())) {
+            errors.rejectValue("password","User.exists.password");
         }
     }
 

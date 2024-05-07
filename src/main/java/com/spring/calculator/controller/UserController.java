@@ -68,12 +68,12 @@ public class UserController {
 
     @GetMapping(value = "/login")
     public String showLoginForm(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute( "user", new User());
         return "login";
     }
 
     @PostMapping("/loginUser")
-    public String loginUser(@ModelAttribute("user") User loginUser, HttpSession session, BindingResult result) {
+    public String loginUser(@ModelAttribute("user") User loginUser, BindingResult result, HttpSession session) {
         // Retrieve the user from the database based on the provided username
         User userFromDB = userService.getUserByUsername(loginUser.getUsername());
 
