@@ -102,7 +102,7 @@ public class CalculatorController {
     public String delete(int id, Model model) {
         numberService.delete(id);
         model.addAttribute("number", numberService.getAll());
-        return "allNumbers";
+        return "redirect:/allNumbers";
     }
 
     @GetMapping(value = "/updateNumber")

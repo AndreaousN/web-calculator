@@ -32,6 +32,9 @@
         a {
             margin-left: 25px;
         }
+        .error {
+            color: #ff3f3f;
+        }
     </style>
 </head>
 <body>
@@ -43,11 +46,13 @@
             <div class="form-group">
                 <label for="username">Username</label>
                 <form:input path="username" type="text" class="form-control" id="username" placeholder="Enter username"/>
+                <form:errors cssClass="error" path="username"/>
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
                 <form:input path="password" type="password" class="form-control" id="password" placeholder="Password"/>
+                <form:errors cssClass="error" path="password"/>
             </div>
 
             <button type="submit" class="btn btn-primary">Login</button>
