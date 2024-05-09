@@ -32,34 +32,38 @@
         a {
             margin-left: 25px;
         }
-        .error {
+        .errors {
             color: #ff3f3f;
         }
     </style>
 </head>
 <body>
 
-    <div class="form-container">
-        <h2>Login</h2>
-        <form:form action="loginUser" modelAttribute="user" method="post" autocomplete="false">
+<div class="form-container">
+    <h2>Login</h2>
+    <form:form method="post" modelAttribute="user" action="loginUser">
 
-            <div class="form-group">
-                <label for="username">Username</label>
-                <form:input path="username" type="text" class="form-control" id="username" placeholder="Enter username"/>
-                <form:errors cssClass="error" path="username"/>
-            </div>
+        <div class="form-group">
+            <label for="exampleInputUsername1">Username</label>
+            <form:input name="username" value="${user.username}" type="text" class="form-control" id="exampleInputUsername1" placeholder="Enter username" path="username"/>
+            <td>
+                <form:errors cssClass="errors" path="username"/>
+            </td>
+        </div>
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <form:input path="password" type="password" class="form-control" id="password" placeholder="Password"/>
-                <form:errors cssClass="error" path="password"/>
-            </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <form:input name="password" value="${user.password}" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" path="password"/>
+            <td>
+                <form:errors cssClass="errors" path="password"/>
+            </td>
+        </div>
 
-            <button type="submit" class="btn btn-primary">Login</button>
-            <a type="button" href="${pageContext.request.contextPath}/register" class="button">Register</a>
+        <button type="submit" class="btn btn-primary">Login</button>
+        <a type="button" href="${pageContext.request.contextPath}/register" class="button">Register</a>
 
-        </form:form>
-    </div>
+    </form:form>
+</div>
 
 <!-- Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

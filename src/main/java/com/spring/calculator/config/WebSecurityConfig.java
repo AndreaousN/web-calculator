@@ -46,9 +46,11 @@ public class WebSecurityConfig {
                 auth -> auth.requestMatchers("/register").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(login -> login.loginPage("/login")
-                        .failureUrl("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
                         .loginProcessingUrl("/loginUser")
                         .defaultSuccessUrl("/calculator", true)
+                        .failureUrl("/login")
                         .permitAll())
                 .logout(logout -> logout.logoutUrl("/login").permitAll());
         return http.build();

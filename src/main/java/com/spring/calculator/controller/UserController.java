@@ -6,6 +6,7 @@ import com.spring.calculator.service.UserService;
 import com.spring.calculator.utils.UserValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +106,4 @@ public class UserController {
         }
         return "redirect:/login";
     }
-
-
 }

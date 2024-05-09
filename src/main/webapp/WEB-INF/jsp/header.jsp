@@ -19,7 +19,7 @@
             <li class="active"><a href="${pageContext.request.contextPath}/allNumbers"> All operations </a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a>Welcome, ${sessionScope.username}</a></li>
+            <li><a>Welcome, ${pageContext.request.userPrincipal.name}</a></li>
             <li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
         </ul>
     </div>
