@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!-- compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -20,6 +22,11 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a>Welcome, ${pageContext.request.userPrincipal.name}</a></li>
+            <li><a>Your Role:
+               <c:forEach var="authority" items="${pageContext.request.userPrincipal.authorities}">
+                   <c:set var="role" value="${fn:substring(authority.authority, 5, fn:length(authority.authority))}"/>
+                   ${role}
+               </c:forEach></a></li>
             <li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
         </ul>
     </div>

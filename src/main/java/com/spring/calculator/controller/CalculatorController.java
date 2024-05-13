@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -100,14 +102,32 @@ public class CalculatorController {
 
     @GetMapping(value = "/delete")
     public String delete(int id, Model model) {
-        numberService.delete(id);
         model.addAttribute("number", numberService.getAll());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(role -> role.getAuthority().equals("ADMIN"));
+
+        if (!isAdmin) {
+            return "403";
+        }
+
+        numberService.delete(id);
+
         return "redirect:/allNumbers";
     }
 
     @GetMapping(value = "/updateNumber")
     public String update(int id, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(role -> role.getAuthority().equals("ADMIN"));
+
+        if (!isAdmin) {
+            return "403";
+        }
+
         model.addAttribute("number", numberService.getById(id));
+
         return "updateNumber";
     }
 

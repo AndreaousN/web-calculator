@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 
@@ -44,10 +45,13 @@
 
                 <td>
 
-                    <!-- Show updating address --> <a href="${updateNumber}">Change</a>
-                    | <a href="${delete}"
+                    <!-- Show updating address -->
+                    <sec:authorize access="hasRole('ADMIN')">
+                        <a href="${updateNumber}">Change</a>
+                    | </sec:authorize> <sec:authorize access="hasRole('ADMIN')">
+                    <a href="${delete}"
                          onclick="if (!(confirm('Are you sure you want to delete this entry?'))) return false">Delete</a>
-                    | <!-- Show number address --> <a href="${showNum}">Show</a>
+                    | </sec:authorize> <!-- Show number address --> <a href="${showNum}">Show</a>
                 </td>
             </tr>
         </c:forEach>
