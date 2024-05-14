@@ -39,4 +39,9 @@ public class NumberServiceImpl implements NumberService {
     public void delete(int id) {
         numberRepository.deleteById(id);
     }
+
+    @Override
+    public List<Number> getUserOperationsById(int id) {
+        return numberRepository.findUserOperationsById(id);
+    }
 }

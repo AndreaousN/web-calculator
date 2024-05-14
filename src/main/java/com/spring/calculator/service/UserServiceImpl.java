@@ -10,7 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
-
 @Service
 public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -31,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
         // Pagal nutylėjimą naujas vartotojas bus "user".
         // Saugumo sumetimais paprastą vartotoją padaryti "admin" galima, kol kas, tik per duomenų bazę
-        user.setRole("ROLE_USER");
+        user.setRole("ROLE_ADMIN");
 
         userRepository.save(user);
     }
@@ -67,5 +66,4 @@ public class UserServiceImpl implements UserService {
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-
 }

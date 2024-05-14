@@ -11,8 +11,8 @@ public class Number {
     @Column(name = "number_id")
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
     @Min(value = 0, message = "Validation error: Number cannot be negative.")
@@ -37,11 +37,12 @@ public class Number {
         this.result = result;
     }
 
-    public Number(int number1, int number2, String operation, int result) {
+    public Number(int number1, int number2, String operation, int result, User user) {
         this.number1 = number1;
         this.number2 = number2;
         this.operation = operation;
         this.result = result;
+        this.user = user;
     }
 
     public Number() {

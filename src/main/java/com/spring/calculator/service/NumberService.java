@@ -16,4 +16,6 @@ public interface NumberService {
     void update(Number number);
 
     void delete(int id);
+
+    List<Number> getUserOperationsById(int id);
 }

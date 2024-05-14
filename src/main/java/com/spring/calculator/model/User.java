@@ -14,7 +14,7 @@ public class User {
     private int id;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Number> numbers;
+    private List<Number> numberList;
 
     @Column(name = "username")
     private String username;
@@ -53,12 +53,12 @@ public class User {
 
     }
 
-    public List<Number> getNumbers() {
-        return numbers;
+    public List<Number> getNumberList() {
+        return numberList;
     }
 
-    public void setNumbers(List<Number> numbers) {
-        this.numbers = numbers;
+    public void setNumberList(List<Number> numberList) {
+        this.numberList = numberList;
     }
 
     public int getId() {

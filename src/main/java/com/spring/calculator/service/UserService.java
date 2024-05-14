@@ -1,7 +1,10 @@
 package com.spring.calculator.service;
 
+import com.spring.calculator.model.Number;
 import com.spring.calculator.model.User;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface UserService {
