@@ -46,8 +46,6 @@ public class WebSecurityConfig {
                 auth -> auth.requestMatchers("/register").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(login -> login.loginPage("/login")
-                        .usernameParameter("username")
-                        .passwordParameter("password")
                         .loginProcessingUrl("/loginUser")
                         .defaultSuccessUrl("/calculator", true)
                         .failureUrl("/login")

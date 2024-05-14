@@ -45,7 +45,7 @@
 
         <div class="form-group">
             <label for="exampleInputUsername1">Username</label>
-            <form:input name="username" value="${user.username}" type="text" class="form-control" id="exampleInputUsername1" placeholder="Enter username" path="username"/>
+            <form:input name="username" value="${user.username}" type="text" class="form-control" id="exampleInputUsername1" placeholder="Enter username" path="username" required="true"/>
             <td>
                 <form:errors cssClass="errors" path="username"/>
             </td>
@@ -53,7 +53,7 @@
 
         <div class="form-group">
             <label for="exampleInputPassword1">Password</label>
-            <form:input name="password" value="${user.password}" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" path="password"/>
+            <form:input name="password" value="${user.password}" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" path="password" required="true"/>
             <td>
                 <form:errors cssClass="errors" path="password"/>
             </td>

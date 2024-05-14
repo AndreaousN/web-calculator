@@ -11,6 +11,10 @@ public class Number {
     @Column(name = "number_id")
     private int id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Min(value = 0, message = "Validation error: Number cannot be negative.")
     @Column(name = "number1")
     private int number1;
@@ -42,6 +46,15 @@ public class Number {
 
     public Number() {
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     // Needed to link numbers from backend to frontend
 
     public int getId() {

@@ -3,6 +3,8 @@ package com.spring.calculator.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -10,6 +12,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private int id;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Number> numbers;
 
     @Column(name = "username")
     private String username;
@@ -46,6 +51,14 @@ public class User {
 
     public User() {
 
+    }
+
+    public List<Number> getNumbers() {
+        return numbers;
+    }
+
+    public void setNumbers(List<Number> numbers) {
+        this.numbers = numbers;
     }
 
     public int getId() {
