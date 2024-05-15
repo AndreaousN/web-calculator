@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
         // Pagal nutylėjimą naujas vartotojas bus "user".
         // Saugumo sumetimais paprastą vartotoją padaryti "admin" galima, kol kas, tik per duomenų bazę
-        user.setRole("ROLE_ADMIN");
+        user.setRole("ROLE_USER");
 
         userRepository.save(user);
     }

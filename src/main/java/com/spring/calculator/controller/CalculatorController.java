@@ -102,8 +102,14 @@ public class CalculatorController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userService.getUserByUsername(username);
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 
-        model.addAttribute("numbers", numberService.getUserOperationsById(user.getId()));
+        if (!isAdmin) {
+            model.addAttribute("numbers", numberService.getUserOperationsById(user.getId()));
+        } else {
+            model.addAttribute("numbers", numberService.getAll());
+        }
 
         return "allNumbers";
     }
@@ -121,7 +127,7 @@ public class CalculatorController {
         model.addAttribute("number", numberService.getAll());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(role -> role.getAuthority().equals("ADMIN"));
+                .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 
         if (!isAdmin) {
             return "403";
@@ -136,7 +142,7 @@ public class CalculatorController {
     public String update(int id, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(role -> role.getAuthority().equals("ADMIN"));
+                .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 
         if (!isAdmin) {
             return "403";
