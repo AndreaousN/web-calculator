@@ -16,6 +16,9 @@
             <th>Operation</th>
             <th>Second number</th>
             <th>Result</th>
+            <sec:authorize access="hasRole('ADMIN')">
+            <th>Username</th>
+            </sec:authorize>
             <th>Actions</th>
         </tr>
         <!-- Iterate through number list -->
@@ -41,7 +44,9 @@
                 <td>${number.operation}</td>
                 <td>${number.number2}</td>
                 <td>${number.result}</td>
-
+                <sec:authorize access="hasRole('ADMIN')">
+                <td>${number.user.username}</td>
+                </sec:authorize>
 
                 <td>
 
