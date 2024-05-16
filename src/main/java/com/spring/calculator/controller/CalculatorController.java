@@ -5,6 +5,7 @@ import com.spring.calculator.model.User;
 import com.spring.calculator.repository.UserRepository;
 import com.spring.calculator.service.NumberService;
 import com.spring.calculator.service.UserService;
+import com.spring.calculator.utils.NumberValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,11 +38,14 @@ import java.util.List;
 public class CalculatorController {
     private final NumberService numberService;
     private final UserService userService;
+    private final NumberValidator numberValidator;
     @Autowired
     public CalculatorController(@Qualifier("NumberService") NumberService numberService,
-                                @Qualifier("UserService")UserService userService) {
+                                @Qualifier("UserService") UserService userService,
+                                NumberValidator numberValidator) {
         this.numberService = numberService;
         this.userService = userService;
+        this.numberValidator = numberValidator;
     }
 
 
@@ -63,6 +67,8 @@ public class CalculatorController {
         // Jeigu daroma validacija, tai pirmas parametras eina su @Valid anotacija, o antras - @BindigResult
     String calculate(@Valid @ModelAttribute("number") Number number, BindingResult br,
                      @RequestParam HashMap<String, String> numbers, ModelMap modelMap) {
+        numberValidator.validate(number, br);
+
         if (br.hasErrors()) {
             // Jeigu pagaunama valdicajos klaida, vartotojas turi likti pradiniame lange
             return "calculator";
@@ -90,7 +96,10 @@ public class CalculatorController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
             User user = userService.getUserByUsername(username);
-            numberService.save(new Number(number1, number2, operation, result, user));
+            Number savedNumbers = new Number(number1, number2, operation, result);
+            savedNumbers.setUser(user);
+
+            numberService.save(savedNumbers);
 
             // prefiksas + jsp failo pavadinimas + sufiksas
             return "calculate";
@@ -154,8 +163,23 @@ public class CalculatorController {
     }
 
     @PostMapping(value = "/updateNum")
-    public String updateNum(@ModelAttribute("number") Number number) {
-        numberService.update(number);
+    public String updateNum(@ModelAttribute("number") Number number, BindingResult br) {
+        numberValidator.validate(number, br);
+
+        if (br.hasErrors()) {
+            return "updateNumber";
+        }
+        Number userByIdNumber = numberService.getById(number.getId());
+
+        number.setUser(userByIdNumber.getUser());
+
+        userByIdNumber.setNumber1(number.getNumber1());
+        userByIdNumber.setNumber2(number.getNumber2());
+        userByIdNumber.setOperation(number.getOperation());
+        userByIdNumber.setResult(number.getResult());
+
+        numberService.update(userByIdNumber);
+
         return "redirect:/showNum?id=" + number.getId();
     }
 }

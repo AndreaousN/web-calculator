@@ -45,25 +45,29 @@
 
         <div class="form-group">
             <label for="exampleInputUsername1">Username</label>
-            <form:input name="username" value="${user.username}" type="text" class="form-control" id="exampleInputUsername1" placeholder="Enter username" path="username"/>
+            <form:input name="username" value="${user.username}" type="text" class="form-control" id="exampleInputUsername1"
+            placeholder="Enter username" path="username"/>
             <form:errors cssClass="error" path="username"/>
         </div>
 
         <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
-            <form:input name="email" value="${user.email}" type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email" path="email"/>
+            <form:input name="email" value="${user.email}" type="email" class="form-control" id="exampleInputEmail1"
+             placeholder="Enter email" path="email"/>
             <form:errors cssClass="error" path="email"/>
         </div>
 
         <div class="form-group">
             <label for="exampleInputPassword1">Password</label>
-            <form:input name="password" value="${user.password}" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" path="password"/>
+            <form:input name="password" value="${user.password}" type="password" class="form-control" id="exampleInputPassword1"
+             placeholder="Password" path="password"/>
             <form:errors cssClass="error" path="password"/>
         </div>
 
         <div class="form-group">
             <label for="exampleInputConfirmPassword1">Confirm Password</label>
-            <form:input name="passwordConfirm" value="${user.passwordConfirm}" type="password" class="form-control" id="exampleInputConfirmPassword1" placeholder="Password" path="passwordConfirm"/>
+            <form:input name="passwordConfirm" value="${user.passwordConfirm}" type="password" class="form-control" id="exampleInputConfirmPassword1"
+             placeholder="Password" path="passwordConfirm"/>
             <form:errors cssClass="error" path="passwordConfirm"/>
         </div>
 

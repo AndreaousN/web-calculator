@@ -17,6 +17,9 @@
         .form-control {
             width: 100%;
         }
+        .error {
+            color: red
+        }
     </style>
 </head>
 
@@ -37,7 +40,9 @@
 
                     <div class="form-group">
                         <label for="number1">First Number:</label>
-                        <input type="number" class="form-control" id="number1" name="number1" value="${number.number1}" required>
+                        <input type="number" class="form-control" id="number1" name="number1"
+                         path="number1" value="${number.number1}" required>
+                        <form:errors path="number1" cssClass="error"/>
                         <div class="invalid-feedback">Please provide a valid number.</div>
                     </div>
 
@@ -55,7 +60,9 @@
 
                     <div class="form-group">
                         <label for="number2">Second Number:</label>
-                        <input type="number" class="form-control" id="number2" name="number2" value="${number.number2}" required>
+                        <input type="number" class="form-control" id="number2" name="number2"
+                         path="number2" value="${number.number2}" required>
+                        <form:errors path="number2" cssClass="error"/>
                         <div class="invalid-feedback">Please provide a valid number.</div>
                     </div>
 
