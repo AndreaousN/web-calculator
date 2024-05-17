@@ -16,9 +16,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @EnableAutoConfiguration
@@ -68,15 +70,17 @@ public class UserController {
     }
 
     @GetMapping(value = "/login")
-    public String showLoginForm(Model model) {
+    public String showLoginForm(Model model, @RequestParam(value = "error", required = false) String error) {
         model.addAttribute( "user", new User());
+        if (error != null) {
+            model.addAttribute("error", "Invalid username or password.");
+        }
         return "login";
     }
 
     @PostMapping("/loginUser")
-    public String loginUser(@ModelAttribute("user") User loginUser, BindingResult result, HttpSession session) {
+    public String loginUser(@ModelAttribute("user") User loginUser, BindingResult result) {
         // Retrieve the user from the database based on the provided username
-        User userFromDB = userService.getUserByUsername(loginUser.getUsername());
 
         userValidator.validate(loginUser, result);
 
@@ -84,18 +88,7 @@ public class UserController {
             return "login";
         }
 
-        // Log the entered username and hashed password for debugging purposes
-        logger.info("Entered Username: {}", loginUser.getUsername());
-        logger.info("Entered Password (Hashed): {}", bCryptPasswordEncoder.encode(loginUser.getPassword()));
-
-        // Compare the hashed passwords using the checkPassword method
-        if (bCryptPasswordEncoder.matches(loginUser.getPassword(), userFromDB.getPassword())) {
-            // Passwords match, user is authenticated
-            session.setAttribute("username", userFromDB.getUsername());
-            return "redirect:/calculator"; // Redirect to the user's profile page
-        } else {
-            return "redirect:/login";
-        }
+        return "redirect:/calculator";
     }
 
     @GetMapping("/logout")

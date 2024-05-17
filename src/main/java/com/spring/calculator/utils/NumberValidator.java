@@ -32,5 +32,8 @@ public class NumberValidator implements Validator {
         if (number.getNumber2() < 0) {
             errors.rejectValue("number2", "Number.negative.number");
         }
+        if ((number.getNumber2() == 0) && (number.getOperation().equals("/"))) {
+            errors.rejectValue("number2", "Number.divisionByZero.number");
+        }
     }
 }

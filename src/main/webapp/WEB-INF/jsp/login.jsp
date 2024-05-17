@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,22 +42,23 @@
 
 <div class="form-container">
     <h2>Login</h2>
-    <form:form method="post" modelAttribute="user" action="loginUser">
+    <c:if test="${not empty error}">
+        <div class="alert alert-danger">
+            Invalid username or password.
+        </div>
+    </c:if>
+    <form:form method="post" modelAttribute="user" action="${pageContext.request.contextPath}/loginUser">
 
         <div class="form-group">
             <label for="exampleInputUsername1">Username</label>
             <form:input name="username" value="${user.username}" type="text" class="form-control" id="exampleInputUsername1" placeholder="Enter username" path="username" required="true"/>
-            <td>
-                <form:errors cssClass="errors" path="username"/>
-            </td>
+
         </div>
 
         <div class="form-group">
             <label for="exampleInputPassword1">Password</label>
             <form:input name="password" value="${user.password}" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" path="password" required="true"/>
-            <td>
-                <form:errors cssClass="errors" path="password"/>
-            </td>
+
         </div>
 
         <button type="submit" class="btn btn-primary">Login</button>

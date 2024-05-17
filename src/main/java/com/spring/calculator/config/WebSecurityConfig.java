@@ -48,7 +48,7 @@ public class WebSecurityConfig {
                 .formLogin(login -> login.loginPage("/login")
                         .loginProcessingUrl("/loginUser")
                         .defaultSuccessUrl("/calculator", true)
-                        .failureUrl("/login")
+                        .failureUrl("/login?error=true")
                         .permitAll())
                 .logout(logout -> logout.logoutUrl("/login").permitAll());
         return http.build();
